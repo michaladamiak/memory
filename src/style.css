@@ -132,6 +132,7 @@ div {
     position: absolute;
     background: transparent;
     cursor: pointer;
+    z-index: 1;
 }
 
 .front {
@@ -150,5 +151,3 @@ div {
     margin: 0;
     -webkit-backface-visibility: hidden;
 }
-
-/* div -> flip -> front + back */

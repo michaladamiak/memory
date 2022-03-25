@@ -8,13 +8,14 @@ document.addEventListener('DOMContentLoaded', () => {
     let random_indexes = []
     let indexes = []
     let s = 0
+    let size = 0
     Array.from(options).forEach(element => {
         s+=2
         element.square = s
         element.addEventListener('click', function(){
             board.style.display = 'flex'
             container.style.display = 'none'
-            const size = element.square
+            size = element.square
             createBoard(size)
             createPairs(size)
             game(size)
@@ -68,43 +69,54 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    function wrongChoice(index) {
-        indexes[index].children[0].style.transform = 'rotateY(0deg)'
+    function wrongChoice(element) {
+        element.style.transform = 'rotateY(0deg)'
     }
 
     function game(size) {
-        let kliks = 0
-        let choice1 = NaN
-        let choice2 = NaN
-        let prev_choice = NaN
-        let points = 0
         for(let i=0; i<size*size; i++) {
-            indexes[i].children[0].addEventListener('click', function(){
-                indexes[i].children[0].style.transform = 'rotateY(-180deg)'
-                kliks++
-            if (kliks%2 == 1) {
-                choice1 = indexes[i].className
-                prev_choice = i
-            } else {
-                if(i != prev_choice) {
-                    choice2 = indexes[i].className
-                    if(choice1!=choice2) {
-                        setTimeout(wrongChoice, 750, i)
-                        setTimeout(wrongChoice, 750, prev_choice)
-                    } else {
-                        points++
-                    }
-                }
-            if(points==size*size/2) {
-                // restatr event for score button
-                score.addEventListener('click', function() {
-                window.location.reload(true)
-                })
-                score.style.display = 'flex'
-            }
-            }
-            })
+            indexes[i].children[0].addEventListener('click', choosing)
         }
     }
-
+    let kliks = 0
+    let choice1 = NaN
+    let choice2 = NaN
+    let prev_choice = NaN
+    let points = 0
+    function choosing(event){
+        event.target.parentElement.style.transform = 'rotateY(-180deg)'
+        kliks++
+        if (kliks%2 == 1) {
+            choice1 = event.target.parentElement.parentElement.className
+            prev_choice = event.target.parentElement.parentElement
+        } else {
+            // console.log(event.target.parentElement.parentElement)
+            // console.log(prev_choice)
+            if(event.target.parentElement.parentElement != prev_choice) {
+                console.log(event.target.parentElement.parentElement)
+                console.log(prev_choice)
+                choice2 = event.target.parentElement.parentElement.className
+                console.log(choice1)
+                console.log(choice2)
+                if(choice1!=choice2) {
+                    setTimeout(wrongChoice, 750, event.target.parentElement)
+                    setTimeout(wrongChoice, 750, prev_choice.children[0])
+                } else {
+                    points++
+                    event.target.parentElement.removeEventListener('click', choosing)
+                    prev_choice.children[0].removeEventListener('click', choosing)
+                }
+            } else {
+                wrongChoice(event.target.parentElement)
+            }   
+        }
+        if(points==size*size/2) {
+            // restatr event for score button
+            score.addEventListener('click', function() {
+            window.location.reload(true)
+            })
+            score.style.display = 'flex'
+        // }
+        }
+    }
 })
