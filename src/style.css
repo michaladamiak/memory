@@ -140,6 +140,7 @@ div {
     position: absolute;
     backface-visibility: hidden;
     margin: 0;
+    -webkit-backface-visibility: hidden;
 }
 
 .back {
@@ -148,6 +149,7 @@ div {
     position: absolute;
     backface-visibility: hidden;
     margin: 0;
+    -webkit-backface-visibility: hidden;
 }
 
 /* div -> flip -> front + back */
